@@ -12,13 +12,13 @@ namespace mission5.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private AddMovieContext __AddMovieContext { get; set; }
+        private AddMovieContext _AddMovieContext { get; set; }
 
         //contructor
         public HomeController(ILogger<HomeController> logger, AddMovieContext newMovie)
         {
             _logger = logger;
-            __AddMovieContext = newMovie;
+            _AddMovieContext = newMovie;
         }
 
         public IActionResult Index()
@@ -40,16 +40,53 @@ namespace mission5.Controllers
         [HttpPost]
         public IActionResult AddMovie(AddMovie am)
         {
-            __AddMovieContext.Add(am);
-            __AddMovieContext.SaveChanges();
+            _AddMovieContext.Add(am);
+            _AddMovieContext.SaveChanges();
 
             return View("Confirmation", am);
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpGet]
+        public IActionResult MoviesList()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var currentMovies = _AddMovieContext.responses
+                .OrderBy(x => x.Title)
+                .ToList();
+
+            return View(currentMovies);
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int movieid)
+        {
+            // set up viewbag for categories
+
+            var NewMovie = _AddMovieContext.responses.Single(x => x.MovieId == movieid);
+            return View("AddMovie", NewMovie);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(AddMovie movie)
+        {
+            _AddMovieContext.Update(movie);
+            _AddMovieContext.SaveChanges();
+            return RedirectToAction("MoviesList");
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int movieid)
+        {
+            var movie = _AddMovieContext.responses.Single(x => x.MovieId == movieid);
+            return View("Delete", movie);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(AddMovie am)
+        {
+            _AddMovieContext.responses.Remove(am);
+            _AddMovieContext.SaveChanges();
+
+            return RedirectToAction("MoviesList");
         }
     }
 }
