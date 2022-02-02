@@ -1,22 +1,21 @@
 ﻿<Properties StartupConfiguration="{AC3F0A1C-AADB-4EEB-BF8C-F5A0EE4AFFB7}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="mission5/Controllers/HomeController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="mission5/Models/AddMovie.cs">
     <Files>
-      <File FileName="mission5/Views/Home/Delete.cshtml" Line="14" Column="8" />
-      <File FileName="mission5/Views/Home/MoviesList.cshtml" Line="5" Column="15" />
-      <File FileName="mission5/Controllers/HomeController.cs" Line="79" Column="21" />
+      <File FileName="mission5/Models/AddMovie.cs" Line="13" Column="1" />
+      <File FileName="mission5/Views/Home/AddMovie.cshtml" Line="48" Column="36" />
+      <File FileName="mission5/Models/AddMovieContext.cs" Line="54" Column="36" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="mission5" expanded="True">
             <Node name="mission5" expanded="True">
-              <Node name="Controllers" expanded="True">
-                <Node name="HomeController.cs" selected="True" />
+              <Node name="Controllers" expanded="True" />
+              <Node name="Models" expanded="True">
+                <Node name="AddMovie.cs" selected="True" />
               </Node>
-              <Node name="Models" expanded="True" />
               <Node name="Views" expanded="True">
                 <Node name="Home" expanded="True" />
-                <Node name="Shared" expanded="True" />
               </Node>
             </Node>
           </Node>

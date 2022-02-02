@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using mission5.Models;
 
@@ -34,22 +35,35 @@ namespace mission5.Controllers
         [HttpGet]
         public IActionResult AddMovie()
         {
+            ViewBag.Categories = _AddMovieContext.Categories.ToList();
             return View();
         }
 
         [HttpPost]
         public IActionResult AddMovie(AddMovie am)
         {
-            _AddMovieContext.Add(am);
-            _AddMovieContext.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                _AddMovieContext.Add(am);
+                _AddMovieContext.SaveChanges();
+                return View("Confirmation", am);
+            }
+            else
+            {
+                ViewBag.Categories = _AddMovieContext.Categories.ToList();
+                return View(am);
+            }
 
-            return View("Confirmation", am);
+
+
         }
 
         [HttpGet]
         public IActionResult MoviesList()
         {
             var currentMovies = _AddMovieContext.responses
+                .Include(x => x.Category)
+                .OrderBy(x => x.Category.CategoryName)
                 .OrderBy(x => x.Title)
                 .ToList();
 
@@ -59,18 +73,27 @@ namespace mission5.Controllers
         [HttpGet]
         public IActionResult Edit(int movieid)
         {
-            // set up viewbag for categories
+            ViewBag.Categories = _AddMovieContext.Categories.ToList();
 
             var NewMovie = _AddMovieContext.responses.Single(x => x.MovieId == movieid);
             return View("AddMovie", NewMovie);
         }
 
         [HttpPost]
-        public IActionResult Edit(AddMovie movie)
+        public IActionResult Edit(AddMovie am)
         {
-            _AddMovieContext.Update(movie);
-            _AddMovieContext.SaveChanges();
-            return RedirectToAction("MoviesList");
+            if (ModelState.IsValid)
+            {
+                _AddMovieContext.Update(am);
+                _AddMovieContext.SaveChanges();
+                return RedirectToAction("MoviesList");
+            }
+            else
+            {
+                ViewBag.Categories = _AddMovieContext.Categories.ToList();
+                return View("AddMovie", am);
+            }
+
         }
 
         [HttpGet]
